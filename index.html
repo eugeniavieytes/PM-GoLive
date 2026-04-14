@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Go-Live Announcement · Professional Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0f0f0f; --ink-muted: #5a5a5a; --ink-faint: #9e9b96;
+    --surface: #faf9f7; --surface-alt: #f2f0ec; --white: #ffffff;
+    --border: #e0ddd8; --border-strong: #b8b4ad;
+    --accent: #1a6b4a; --accent-hover: #0f4a32; --accent-light: #e8f4ef;
+    --accent-mid: #b5d9c8; --accent-text: #0f4a32;
+    --danger: #c0392b; --danger-light: #fdf0ee; --danger-border: #f0c4be;
+    --info: #1a4f8c; --info-light: #eef3fb; --info-border: #bcd0f0;
+    --radius: 6px; --radius-lg: 10px; --radius-xl: 14px;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif; font-weight: 400;
+    background: var(--surface); color: var(--ink);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 3rem 1.5rem 5rem;
+  }
+  .header { width: 100%; max-width: 680px; margin-bottom: 2rem; }
+  .eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--accent); border-radius: 2px; }
+  .header h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 400; line-height: 1.1; margin-bottom: 0.6rem; }
+  .header h1 em { font-style: italic; color: var(--accent); }
+  .header p { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+  .destinations { width: 100%; max-width: 680px; display: flex; gap: 8px; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .dest-tag { display: flex; align-items: center; gap: 7px; padding: 5px 12px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--ink-muted); font-weight: 500; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .card { width: 100%; max-width: 680px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.75rem 2rem; margin-bottom: 1rem; }
+  .card-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-muted); margin-bottom: 5px; }
+  .req { color: var(--danger); margin-left: 1px; }
+  input[type="text"], input[type="date"], textarea {
+    width: 100%; padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--ink); background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,107,74,0.1); background: var(--white); }
+  input::placeholder, textarea::placeholder { color: var(--ink-faint); }
+  textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.4; cursor: pointer; }
+  .hint { font-size: 11px; color: var(--ink-faint); margin-top: 5px; line-height: 1.5; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+  .tab-btn { padding: 5px 12px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; border: 1px solid var(--border); border-radius: 20px; background: var(--white); color: var(--ink-muted); cursor: pointer; transition: all 0.12s; }
+  .tab-btn.active { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent-text); }
+  .preview-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 8px; }
+  .preview-box { background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; min-height: 72px; }
+  .preview-box pre { font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.6; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
+  .preview-empty { color: var(--ink-faint); font-style: italic; font-size: 13px; }
+  .btn-row { width: 100%; max-width: 680px; display: flex; gap: 10px; }
+  .btn { flex: 1; padding: 12px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; border-radius: var(--radius); cursor: pointer; border: 1px solid transparent; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: var(--white); color: var(--ink-muted); border-color: var(--border); flex: 0 0 auto; }
+  .btn-ghost:hover { background: var(--surface-alt); border-color: var(--border-strong); }
+  .msg { width: 100%; max-width: 680px; padding: 11px 16px; border-radius: var(--radius); font-size: 13px; line-height: 1.7; display: none; margin-top: 0.75rem; }
+  .msg.ok  { background: var(--accent-light); color: var(--accent-text); border: 1px solid var(--accent-mid); }
+  .msg.err { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-border); }
+  .msg.info { background: var(--info-light); color: var(--info); border: 1px solid var(--info-border); }
+  .spin { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: rot 0.6s linear infinite; flex-shrink: 0; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  .success-screen { display: none; width: 100%; max-width: 680px; text-align: center; padding: 3rem 2rem; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-xl); }
+  .success-icon { width: 54px; height: 54px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 22px; }
+  .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 1.65rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .success-screen p { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+  .success-results { font-size: 13px; color: var(--ink-muted); margin: 1rem 0 1.5rem; line-height: 2; }
+  .success-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); font-weight: 500; text-decoration: none; padding: 8px 18px; background: var(--accent-light); border-radius: var(--radius); margin-bottom: 1.5rem; transition: background 0.12s; }
+  .success-link:hover { background: #d3ece3; }
+  .footer { width: 100%; max-width: 680px; margin-top: 2.5rem; text-align: center; font-size: 11px; color: var(--ink-faint); }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .header h1 { font-size: 2rem; } .card { padding: 1.25rem; } .btn-row { flex-direction: column; } .btn-ghost { flex: 1; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Professional Services</div>
+  <h1>Go-Live <em>Announcement</em></h1>
+  <p>Fill in the project details. The announcement will publish to Confluence and post in Google Chat automatically.</p>
+</div>
+
+<div class="destinations">
+  <div class="dest-tag"><div class="dot" style="background:#1a6b4a;"></div>Confluence · PPE / Go-Live Announcements</div>
+  <div class="dest-tag"><div class="dot" style="background:#1a4f8c;"></div>Google Chat · team everyone</div>
+</div>
+
+<div id="form-area">
+  <div class="card">
+    <div class="card-title">Project details</div>
+    <div class="row">
+      <div class="field">
+        <label>Project name <span class="req">*</span></label>
+        <input type="text" id="f-project" placeholder="e.g. Customer Portal v2.0" oninput="livePreview()" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label>Client <span class="req">*</span></label>
+        <input type="text" id="f-client" placeholder="e.g. Viacom" oninput="livePreview()" autocomplete="off" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Go-live date <span class="req">*</span></label>
+        <input type="date" id="f-date" oninput="livePreview()" />
+      </div>
+      <div class="field">
+        <label>PS Lead <span class="req">*</span></label>
+        <input type="text" id="f-lead" placeholder="e.g. Andres Tomlin" oninput="livePreview()" autocomplete="off" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Description <span class="req">*</span></label>
+      <textarea id="f-desc" placeholder="What modules or features went live? What was delivered to the client?" oninput="livePreview()"></textarea>
+    </div>
+    <div class="field">
+      <label>Additional notes</label>
+      <textarea id="f-notes" style="min-height:65px;" placeholder="Next steps, key milestones, context for the team..." oninput="livePreview()"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Integrations</div>
+    <div class="field">
+      <label>Google Chat webhook URL</label>
+      <input type="text" id="f-webhook" placeholder="https://chat.googleapis.com/v1/spaces/..." />
+      <p class="hint">In Google Chat: open the space → ⚙️ → Apps &amp; integrations → Webhooks → Add webhook → copy the URL.</p>
+    </div>
+    <div class="field" style="margin-top:1.25rem;">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('chat')">Google Chat</button>
+        <button class="tab-btn" onclick="switchTab('confluence')">Confluence row</button>
+      </div>
+      <div class="preview-label" id="preview-label">Message preview · Google Chat</div>
+      <div class="preview-box" id="preview-box">
+        <div class="preview-empty">Fill in the fields above to see a preview...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="resetForm()">Clear</button>
+    <button class="btn btn-primary" id="btn-submit" onclick="handlePublish()">Publish announcement</button>
+  </div>
+  <div class="msg" id="msg"></div>
+</div>
+
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">🚀</div>
+  <h2>Announcement published!</h2>
+  <p>The go-live has been recorded.</p>
+  <div class="success-results" id="success-results"></div>
+  <a href="https://fabric.atlassian.net/wiki/spaces/PPE/pages/4384522260/Go-Live+Announcements" target="_blank" class="success-link">View Confluence page ↗</a>
+  <br/><br/>
+  <button class="btn btn-ghost" style="max-width:200px;margin:0 auto;" onclick="resetForm()">Submit another</button>
+</div>
+
+<div class="footer">Professional Services · Fabric · Go-Live Announcements</div>
+
+<script>
+const PAGE_ID  = '4384522260';
+const PAGE_URL = 'https://fabric.atlassian.net/wiki/spaces/PPE/pages/4384522260/Go-Live+Announcements';
+const API_BASE = 'https://fabric.atlassian.net/wiki/api/v2';
+
+let currentTab = 'chat';
+
+function v(id) { return document.getElementById(id).value.trim(); }
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function buildChatMsg(d) {
+  let m = `🚀 *Go-Live: ${d.project}*\n`;
+  m += `*Client:* ${d.client}   |   *Date:* ${d.dateStr}   |   *PS Lead:* ${d.lead}\n\n`;
+  m += d.description;
+  if (d.notes) m += `\n\n📝 ${d.notes}`;
+  m += `\n\n🔗 ${PAGE_URL}`;
+  return m;
+}
+
+function buildConfluenceRow(d, n) {
+  return `<tr><td><p>${n}</p></td><td><p><strong>${esc(d.project)}</strong></p></td><td><p>${esc(d.client)}</p></td><td><p>${esc(d.dateStr)}</p></td><td><p>${esc(d.lead)}</p></td><td><p>${esc(d.description)}</p></td><td><p>${esc(d.notes||'—')}</p></td></tr>`;
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function livePreview() {
+  const p = v('f-project'), c = v('f-client'), d = v('f-date'), l = v('f-lead'), desc = v('f-desc'), notes = v('f-notes');
+  const box = document.getElementById('preview-box');
+  if (!p && !c) { box.innerHTML = '<div class="preview-empty">Fill in the fields above to see a preview...</div>'; return; }
+  const data = { project: p||'—', client: c||'—', dateStr: fmtDate(d), lead: l||'—', description: desc||'—', notes };
+  if (currentTab === 'chat') {
+    const pre = document.createElement('pre');
+    pre.textContent = buildChatMsg(data);
+    box.innerHTML = ''; box.appendChild(pre);
+  } else {
+    const pre = document.createElement('pre');
+    pre.textContent = `#  | ${data.project}\nClient  | ${data.client}\nDate    | ${data.dateStr}\nPS Lead | ${data.lead}\nDesc    | ${data.description}` + (data.notes ? `\nNotes   | ${data.notes}` : '');
+    box.innerHTML = ''; box.appendChild(pre);
+  }
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', (i === 0 && tab === 'chat') || (i === 1 && tab === 'confluence')));
+  document.getElementById('preview-label').textContent = tab === 'chat' ? 'Message preview · Google Chat' : 'Preview · Confluence row';
+  livePreview();
+}
+
+function showMsg(html, type) { const el = document.getElementById('msg'); el.innerHTML = html; el.className = 'msg ' + type; el.style.display = 'block'; }
+function hideMsg() { document.getElementById('msg').style.display = 'none'; }
+function setBtn(html, disabled) { const b = document.getElementById('btn-submit'); b.innerHTML = html; b.disabled = disabled; }
+
+function validate() {
+  if (!v('f-project')) return 'Project name is required.';
+  if (!v('f-client'))  return 'Client is required.';
+  if (!v('f-date'))    return 'Go-live date is required.';
+  if (!v('f-lead'))    return 'PS Lead is required.';
+  if (!v('f-desc'))    return 'Description is required.';
+  return null;
+}
+
+async function handlePublish() {
+  hideMsg();
+  const err = validate();
+  if (err) { showMsg(err, 'err'); return; }
+  setBtn('<span class="spin"></span> Publishing...', true);
+
+  const data = { project: v('f-project'), client: v('f-client'), date: v('f-date'), dateStr: fmtDate(v('f-date')), lead: v('f-lead'), description: v('f-desc'), notes: v('f-notes') };
+  const webhook = v('f-webhook');
+  const results = [];
+
+  // 1 — Google Chat
+  if (webhook.startsWith('https://chat.googleapis.com')) {
+    try {
+      const r = await fetch(webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: buildChatMsg(data) }) });
+      results.push(r.ok ? '✓ Google Chat — message posted successfully' : '✗ Google Chat — failed (HTTP ' + r.status + ')');
+    } catch(e) { results.push('✗ Google Chat — ' + e.message); }
+  } else {
+    results.push(webhook ? '✗ Google Chat — invalid webhook URL' : '— Google Chat skipped (no webhook provided)');
+  }
+
+  // 2 — Confluence
+  try {
+    const pageRes = await fetch(`${API_BASE}/pages/${PAGE_ID}?body-format=storage`);
+    if (!pageRes.ok) throw new Error('Could not read the Confluence page (HTTP ' + pageRes.status + '). Make sure you are logged in to Confluence in this browser.');
+    const pageData = await pageRes.json();
+    const ver = pageData.version.number;
+    const body = pageData.body.storage.value;
+    const dataRows = Math.max(0, (body.match(/<tr>/gi)||[]).length - 1);
+    const newRow = buildConfluenceRow(data, dataRows + 1);
+    const firstEnd = body.indexOf('</tr>');
+    const updated = firstEnd !== -1 ? body.slice(0, firstEnd + 5) + '\n' + newRow + body.slice(firstEnd + 5) : body + newRow;
+    const putRes = await fetch(`${API_BASE}/pages/${PAGE_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: PAGE_ID, status: 'current', title: 'Go-Live Announcements', body: { representation: 'storage', value: updated }, version: { number: ver + 1, message: 'Go-live: ' + data.project + ' – ' + data.client } })
+    });
+    if (putRes.ok) { results.push('✓ Confluence — entry #' + (dataRows + 1) + ' added to the page'); }
+    else { const t = await putRes.text(); throw new Error('HTTP ' + putRes.status + (t ? ': ' + t.slice(0,100) : '')); }
+  } catch(e) { results.push('✗ Confluence — ' + e.message); }
+
+  setBtn('Publish announcement', false);
+
+  if (results.some(r => r.startsWith('✓'))) {
+    document.getElementById('success-results').innerHTML = results.map(r => `<div>${r}</div>`).join('');
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+  } else {
+    showMsg(results.map(r => `<div>${r}</div>`).join(''), 'err');
+  }
+}
+
+function resetForm() {
+  ['f-project','f-client','f-date','f-lead','f-desc','f-notes','f-webhook'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  livePreview(); hideMsg(); setBtn('Publish announcement', false);
+  document.getElementById('form-area').style.display = 'block';
+  document.getElementById('success-screen').style.display = 'none';
+}
+
+document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
